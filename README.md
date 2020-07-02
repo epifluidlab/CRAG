@@ -1,5 +1,5 @@
 # CRAG
-De novo characterization of cell-free DNA fragmentation hotspots
+**C**ell f**R**ee dn**A** fra**G**mentation (CRAG): *De novo* characterization of cell-free DNA fragmentation hotspots.
 
 ## Table of Contents
 1. [Quick start](#quick-start)
