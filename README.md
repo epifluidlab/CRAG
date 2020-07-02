@@ -11,9 +11,9 @@ De novo characterization of cell-free DNA fragmentation hotspots
 ## Quick start
 1. Install
 	```
-	git clone --recursive https://github.com/dnaase/QtlWater.git
+	git clone --recursive https://github.com/epifluidlab/CRAG.git
 	cd CRAG
-  TBD
+  	TBD
 	```
 
 2. Run the [example test file](configure.txt)
