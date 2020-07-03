@@ -34,8 +34,8 @@
 * Linux, Mac OSX, and Windows
 * Matlab 2019b
 * python 2.7 
-* pysam
-* samtools
+* pysam 0.12.0.1 or above
+* samtools 1.9
 
 #### required files
 1. Bam file (paired-end whole-genome sequencing, recommend to have at least 400 million fragments in autosomes after the samtools filtering step. If you want to call hotspots for several chrommsomes (not the whole autosome), you can provide the bam file only with the corresponding chromosomes.)
@@ -44,7 +44,7 @@
 
 ## Usage
 
-### Sample pre-processing and read
+### Pre-process bam file
 ```
 samtools view -bh -f 3 -F 3852 -q 30 input.bam > output.filtered.bam
 
