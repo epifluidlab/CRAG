@@ -34,8 +34,8 @@
 * Linux, Mac OSX, and Windows
 * Matlab 2019b
 * python 2.7 
-* pysam 0.12.0.1 or above
-* samtools 1.9
+* pysam
+* samtools
 
 #### required files
 1. Bam file (paired-end whole-genome sequencing, recommend to have at least 400 million fragments in autosomes after the samtools filtering step. If you want to call hotspots for several chrommsomes (not the whole autosome), you can provide the bam file only with the corresponding chromosomes.)
@@ -44,7 +44,7 @@
 
 ## Usage
 
-### Pre-process bam file
+### Sample pre-processing and read
 ```
 samtools view -bh -f 3 -F 3852 -q 30 input.bam > output.filtered.bam
 
@@ -64,14 +64,14 @@ matlab -nodisplay -r 'CRAG result_dir 1; exit;'
 ```
 #### Options for hotspot calling
 ```
--mappability track
--dark regions
--global p value cut-off
--local p value cut-off
--ks-test
--fdr cut-off
--hotspot distance for merging
+-global p value cut-off: argument: 'global_p', a positive number between 0 to 1 ([0,1]). default: 0.00001. 
+-local p value cut-off: argument: 'local_p', a positive number between 0 to 1 ([0,1]).default: 0.00001
+-fdr cut-off:argument: 'fdr', a positive number between 0 to 1 ([0,1]). default: 0.01
+-hotspot distance for merging: argument: 'distance', a positive integer ([1,inf)). default: 200
+-whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 1. 
 ```
+CRAG('result_dir',1,'local_p',0.001,'distance',300,'enrichment',0)
+--Call hotspots in 'result_dir', using IFS without GC-bias correction, with global p value cut-off = 0.00001, local p value cut-off = 0.001 and fdr cut-off = 0.01. After the significant regions were detected, the regions nearby (with distance less than 300bp) were merged. And the pipeline will produce four files (two hotspot files: hotspots.bed and hotspots.mat and two files of the fragmentation pattern around hotspots (IFS_plot.fig, IFS_plot.pdf))in result_dir/result/n.
 
 ### Unsupervised clustering, and t-SNE
 	* For steps using GC bias corrected IFS:
