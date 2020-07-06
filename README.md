@@ -19,15 +19,15 @@
 2. Download the test bam file and required GC and mappability files
 	```
 	cd Basic_info
-	wget -c https://zenodo.org/api/files/74b12cd4-d04c-4b86-a6ec-49da7a402888/GC.zip
-	wget -c https://zenodo.org/api/files/74b12cd4-d04c-4b86-a6ec-49da7a402888/mappability.zip
-	wget -c https://zenodo.org/api/files/74b12cd4-d04c-4b86-a6ec-49da7a402888/chrm_state.zip
+	wget -c https://zenodo.org/record/3928546/files/GC.zip
+	wget -c https://zenodo.org/record/3928546/files/mappability.zip
+	wget -c https://zenodo.org/record/3928546/files/chrm_state.zip
 	unzip GC.zip
 	unzip mappability.zip
 	unzip chrm_state.zip
 	cd ../hotspots_calling
-	wget -c https://zenodo.org/api/files/74b12cd4-d04c-4b86-a6ec-49da7a402888/BH01.chr22.bam
-	wget -c https://zenodo.org/api/files/74b12cd4-d04c-4b86-a6ec-49da7a402888/BH01.chr22.bam.bai
+	wget -c https://zenodo.org/record/3928546/files/BH01.chr22.bam
+	wget -c https://zenodo.org/record/3928546/files/BH01.chr22.bam.bai
 	```
 3. Run the example test file at your bash command line to call hotspot. (**link the Basic_info/ into your current working directory**)
 	```
@@ -52,9 +52,9 @@ This should produce the following files (inside test_dir/result_n/):
 #### required files
 * Indexed Bam file (paired-end whole-genome sequencing, recommend to have at least 400 million fragments in autosomes after the samtools filtering step. If you want to call hotspots for several chrommsomes (not the whole autosome), you can provide the bam file only with the corresponding chromosomes.)
 * Basic_info directory **Always link the Basic_info/ under your current working directory** (example is showed in Quick Start part)
-* GC content files (provided in [zenodo.org](https://zenodo.org/api/files/74b12cd4-d04c-4b86-a6ec-49da7a402888/GC.zip) for hg19/GRch37, download it under Basic_info directory and unzip it)
-* Mappability files (provided in [zenodo.org](https://zenodo.org/api/files/74b12cd4-d04c-4b86-a6ec-49da7a402888/mappability.zip) for hg19/GRch37, download it under Basic_info directory and unzip it)
-* ChromHMM state files (provided in [zenodo.org](https://zenodo.org/api/files/74b12cd4-d04c-4b86-a6ec-49da7a402888/chrm_state.zip) for hg19/GRch37, download it under Basic_info directory and unzip it)
+* GC content files (provided in [zenodo.org](https://zenodo.org/record/3928546/files/GC.zip) for hg19/GRch37, download it under Basic_info directory and unzip it)
+* Mappability files (provided in [zenodo.org](https://zenodo.org/record/3928546/files/mappability.zip) for hg19/GRch37, download it under Basic_info directory and unzip it)
+* ChromHMM state files (provided in [zenodo.org](https://zenodo.org/record/3928546/files/chrm_state.zip) for hg19/GRch37, download it under Basic_info directory and unzip it)
 
 ## Usage
 
