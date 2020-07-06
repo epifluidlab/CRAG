@@ -1,0 +1,14 @@
+(1) In this folder, we provide two fucntions for overlapping alalysis, one (overlap.m) is for calculating the overlaps between two hotspot files, and the other one (overlap_ratio_repeat.m)
+is for calculating the overlap of one hotspot file with repeats. The both functions are the main functions used in figure 4 (i.e. Figure 4a and figure 4e).
+
+(2) In overlap.m, it was used to investigate the ratio of hotspots in peak_file_a that were overlapped by hotspots in peak_file_b.
+For example, if we want to calculate how many hotspots in BH01 was overlapped by known open resgions (All the known open regions was saved in 'Basic_info/wbc(immune)_liver_hcc.mat').
+We can run the function as [ratio, over_peak]=overlap('BH01/result_n/peak_all.mat','Basic_info/wbc(immune)_liver_hcc.mat'); then we can get two variables:
+ratio: hotspots in BH01 was overlapped by known open regions.
+over_peak: the overlapped hotspots in BH01.
+
+(3)In overlap.m, it was used to investigate the ratio of hotspots in peak_file_a that were overlapped by regions in repeat file.
+For example, if we want to calculate how many hotspots in BH01 was overlapped by Low_complexity (All the repeat files was saved in 'Basic_info/repeat/').
+We can run the function as [ratio, over_peak]=overlap('BH01/result_n/peak_all.mat','Basic_info/repeat/hg19_Low_complexity.mat'); then we can get two variables:
+ratio: hotspots in BH01 was overlapped by Low_complexity.
+over_peak: the overlapped hotspots in BH01.

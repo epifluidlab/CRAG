@@ -1,0 +1,37 @@
+%%%%%%%%%%%%%%
+(1)Signal_hotspot_calculate.m was used to calculate the histone siganls (i.e. DNase siganls, H3K4me1 siganls etc.) around the hotspots.
+For example, Signal_hotspot_calculate('E29','DNase','BH01') could be used to calculate the DNase siganls in E29 (monocyte) around the hotspots in BH01.
+The output of this function is 'DNase_BH01.mat', which was saved in '/Basic_info/Histone_Signal/E29/'. In this file, there are two variables:
+x-x axis value (distance to the hotspot)
+y-y axis value (the average signals around the hotspots).
+We can use plot(x,y) to get the figure (DNase siganls around the hotspots in BH01).
+
+(2)To run this function, the file (Signal_hotspot_calculate.m) should be in the same floder of 'Basic_info'.
+By default, the histone siganls data should be saved in 'Basic_info/Histone_Signal/'.
+For example, the DNse siganls of E29 should be in the path 'Basic_info/Histone_Signal/E29/DNase/'.
+In this path, there are 22 .mat files (chr1.mat, chr2.mat,...,chr22.mat), which saved the DNase siganls of the 22 chromosomes.
+In each file, it contains a variable 'loc', which is a N*1 array. N is the number of bases in the current chromosome. loc(i,1) is the DNase signal in the ith bases.
+Also, the hotspots should be in the corresponding path, such as 'BH01/result_n/peak_all.mat'.
+
+If you want to calculate the histone siganls of new sample around a new hotspot file. For example, the H3K4me1 siganls of E32 around IH01. Then you should have the hotspots
+file for IH01 in 'IH01/result_n/peak_all.mat', and the H3K4me1 siganls of E32 in 'Basic_info/Histone_Signal/E32/H3K4me1/chr1...chr22.mat'.
+And run the function Signal_hotspot_calculate('E32','H3K4me1','IH01'), you could get the result in 'Basic_info/Histone_Signal/E32/H3K4me1_IH01.mat'.
+
+(3)The function could be used to finish figure 3a, figure 3b and similar analysis (figure 4b).
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+(4)myth_signal_hotspot.m was used to calculate the DNA mythelation levels around the hotspots.
+For example, myth_signal_hotspote('BH01','PNAS_healthy') could be used to calculate the DNA mythelation levels in PNAS healthy plasma sample around the hotspots in BH01.
+The output of this function is 'BH01_PNAS_healthy_DNAmyth.mat', which was saved in 'Basic_info/myth_path/'. In this file, there are two variables:
+x_val-x axis value (distance to the hotspot)
+y_val-y axis value (the average DNA mythelation levels around the hotspots).
+We can use plot(x,y) to get the figure (DNase siganls around the hotspots in BH01).
+
+(5)To run this function, the file (myth_signal_hotspot.m) should be in the same floder of 'Basic_info'.
+By default, the histone siganls data should be saved in 'Basic_info/myth_path/'.
+For example, the DNse mythelation data of PNAS_healthy should be in the path 'Basic_info/myth_path/PNAS_healthy/'.
+In this path, there are 22 .mat files (chr1.mat, chr2.mat,...,chr22.mat), which saved the DNase siganls of the 22 chromosomes.
+In each file, it contains a variable 'loc', which is a N*1 array. N is the number of bases in the current chromosome. loc(i,1) is the DNase signal in the ith bases.
+If there no DNA methelation site in the bases, the defalut value should be negative, such as -1, so as to distinguish the base is zero mythelated or without detected.
+Also, the hotspots should be in the corresponding path, such as 'BH01/result_n/peak_all.mat'.
+The function could be used to finish figure 4c or similar analysis.
