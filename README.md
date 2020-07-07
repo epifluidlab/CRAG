@@ -39,7 +39,7 @@
 This should produce the following files (inside test_dir/result_n/):
 	* the hotspots (peak_all.mat, peaks.bed), 
 	* fragmentation pattern around hotspots (IFS_plot.fig, IFS_plot.pdf)
-	* enrichment patterns (TSS_plot.fig, TSS_plot.pdf, CTCF_plot.fig, CTCF_plot.pdf, Enrichment_plot.fig,Enrichment_plot.pdf)  
+	* enrichment patterns (TSS_plot.fig, TSS_plot.pdf, CTCF_plot.fig, CTCF_plot.pdf, Enrichment_plot.fig, Enrichment_plot.pdf)  
 
 ## Installation
 #### Prerequisites
