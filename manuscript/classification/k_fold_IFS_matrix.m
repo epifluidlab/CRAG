@@ -19,6 +19,14 @@ function k_fold_IFS_matrix(fold_info,input_path,out_file_name,peak_type,ith,pos_
 %%disease,i.e.breast,if this is a fold-call for
 %%multi-classification,spefiific it as 'None'.
 
+%%%%%%Add the path of the funtions used in this pipeline as workplace
+current_path=pwd;
+lo=strfind(current_path,'/');
+parent_path=current_path(1,1:(lo(end)-1));
+addpath(genpath(parent_path));
+
+
+
 if ischar(peak_type)
     peak_type=str2double(peak_type);
 end
@@ -27,7 +35,7 @@ if ischar(ith)
 end
 
 
-if ischar (fold_info) && (contains(strfind(fold_info,'.xlsx')) || contains(strfind(fold_info,'.xls')))
+if ischar (fold_info) && (contains(fold_info,'.xlsx') || contains(fold_info,'.xls'))
     %%%%%The input is an excel file
     [fold_id,sample_info]=xlsread(fold_info);
 else
@@ -65,13 +73,13 @@ if strcmpi(pos_class,'None')
         result_out=strcat(new_out_name,temp_out_name);
         file_loc=strcmpi(train_sample(:,2),type_name{i,1});
         file_list=train_sample(file_loc,1);
-        IFS_matrix_obtain(file_list,input_path,result_out,peak_type,out_name);
+        IFS_matrix_obtain(file_list(:,1),input_path,result_out,peak_type,out_name);
     end
     
     %%%%%%%%%%get the label for test data set and get the matrix
     test_label=zeros(length(test_sample(:,1)),1);
     for j=1:n
-        file_loc=strcmpi(test_sample(:,2),type_name{i,1});
+        file_loc=strcmpi(test_sample(:,2),type_name{j,1});
         test_label(file_loc,1)=j;
     end
     temp_out_name='test_norm_data.mat';
@@ -104,7 +112,7 @@ else
     IFS_matrix_obtain(test_sample(:,1),input_path,result_out,peak_type,out_name);
     load (result_out);
     %%%add the test_label information to the data
-    save((result_out),'ma','peak_num','sample','peak','peak_origin','test_label')
+    save((result_out),'ma','peak_num','sample','peak','peak_origin','test_label','-v7.3')
 end
 
 end
