@@ -3,9 +3,8 @@ function k_fold_call(fold_info,input_path,out_file_name,peak_type,ith,varargin)
 %%%%%and save the hotspots in out_name/ith/diseasetype/result_n
 %fold_info:the name of an excel file (include the Suffix name). Or a
 %variable include all the the files
-%the excel file or the variable should include three columns:1th,
-%sample_name (String,i,e,C302),2th,disease type (String:i.e.breast),3th,a interger indicate which
-%fold the sample is belonged to.
+%the excel file or the variable should include three columns:
+%1st, sample_name (String: e.g. C302); 2nd, disease type (String: e.g. breast); 3rd, an interger indicate which fold the sample is belonged to.
 
 %%input_path: The path of all the sample files
 
@@ -22,7 +21,15 @@ function k_fold_call(fold_info,input_path,out_file_name,peak_type,ith,varargin)
 %%local_p: p-value cut-off for local test
 %%fdr: cut-off
 %%distance: Distance cut-off to merge the significant regions nearby.
-%%enrichment:whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 1
+%%enrichment:whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 0
+
+
+%%%%%%Add the path of the funtions used in this pipeline as workplace
+current_path=pwd;
+lo=strfind(current_path,'/');
+parent_path=current_path(1,1:(lo(end)-1));
+addpath(genpath(parent_path));
+
 
 if ischar(peak_type)
     peak_type=str2double(peak_type);
@@ -32,22 +39,25 @@ if ischar(ith)
 end
 
 
-if ischar (fold_info) && (contains(strfind(fold_info,'.xlsx')) || contains(strfind(fold_info,'.xls')))
+if ischar (fold_info) && (contains(fold_info,'.xlsx') || contains(fold_info,'.xls'))
     %%%%%The input is an excel file
     [fold_id,sample_info]=xlsread(fold_info);
 else
-    fold_id=fold_info(:,3);
+    fold_id=cell2mat(fold_info(:,3));
+    if ischar(fold_id)
+       fold_id=str2double(fold_id); 
+    end
     sample_info=fold_info(:,1:2);
 end
 
 if nargin<5;error('There should be at least five input parameters');end
-if nargin==6;error('Input parameters error£¡');end
+if nargin==6;error('Input parameters error!');end
 
 global_p=0.00001;
 local_p=0.00001;
 fdr=0.01;
 distance=200;
-enrichment=1;
+enrichment=0;
 para_val=varargin;
 while length(para_val)>=2
     prop =para_val{1};
@@ -86,7 +96,7 @@ for i=1:n
    system(['mkdir ' dis_out_name{i,1}]);
    loc=strcmpi(train_sample(:,2),type_name{i,1});
    current_sample_list=train_sample(loc,1);
-   Hotspot_call_multi_sample(current_sample_list,input_path,dis_out_name{i,1},peak_type,'enrichment',0);
+   Hotspot_call_multi_sample(current_sample_list,input_path,dis_out_name{i,1},peak_type,'enrichment',enrichment);
 end
 
 end
