@@ -1,12 +1,12 @@
 function data_merge(in_path_name,out_path,file_list,loop_id)
 %%%%%%%%%%%%Merge the IFS score of multi-samples and output the merged IFS
 %%%%%%%%%%%%score
-A=importdata('./Basic_info/chrome_info.txt');
+A=importdata('Basic_info/chrome_info.txt');
 chr_id=A.textdata;
 chr_length=A.data;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-path_name=strcat('./',out_path);
+path_name=out_path;
 path_name=strcat(path_name,'/');
 
 produce_file=strcat(path_name,'data_n');  %%%%%% fragment length
