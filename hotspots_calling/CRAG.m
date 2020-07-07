@@ -7,11 +7,20 @@ function CRAG(data_name,peak_type,varargin)
 %%fdr: cut-off
 %%distance: Distance cut-off to merge the significant regions nearby.
 %%enrichment:whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 1.
+
+%%%%%%Add the path of the funtions (data) used in this pipeline as workplace
+current_path=pwd;
+lo=strfind(current_path,'/');
+parent_path=current_path(1,1:(lo(end)-1));
+addpath(genpath(parent_path));
+
+
+
 if ischar(peak_type)
     peak_type=str2double(peak_type);
 end
 if nargin<2;error('There should be at least two input parameters');end
-if nargin==3;error('Input parameters error£¡');end
+if nargin==3;error('Input parameters errorÂ£Â¡');end
 
 global_p=0.00001;
 local_p=0.00001;
