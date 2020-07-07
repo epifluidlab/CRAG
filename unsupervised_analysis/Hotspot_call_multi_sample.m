@@ -17,13 +17,13 @@ function Hotspot_call_multi_sample(file_list,input_path,out_name,peak_type,varar
 if ischar(peak_type)
     peak_type=str2double(peak_type);
 end
-if ischar (file_list) && (contains(strfind(filelist,'.xlsx')) || contains(strfind(filelist,'.xls')))
+if ischar (file_list) && (contains(filelist,'.xlsx') || contains(filelist,'.xls'))
     %%%%%The input is an excel file
     [~,file_list]=xlsread(file_list);
 end
 
 if nargin<4;error('There should be at least four input parameters');end
-if nargin==5;error('Input parameters error£¡');end
+if nargin==5;error('Input parameters errorÂ£Â¡');end
 
 global_p=0.00001;
 local_p=0.00001;
