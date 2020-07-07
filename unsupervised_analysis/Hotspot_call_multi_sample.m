@@ -13,7 +13,7 @@ function Hotspot_call_multi_sample(file_list,input_path,out_name,peak_type,varar
 %%local_p: p-value cut-off for local test
 %%fdr: cut-off
 %%distance: Distance cut-off to merge the significant regions nearby.
-%%enrichment:whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 0.
+%%enrichment:whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 1.
 
 %%%%%%Add the path of the funtions used in this pipeline as workplace
 current_path=pwd;
