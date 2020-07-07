@@ -4,7 +4,7 @@ function IFS_matrix_obtain(file_list,input_path,out_name,peak_type,peak_file,var
 %variable include all the the files
 %%input_path: The path of all the files
 %%out_name: The output file name (matrix file name)
-%%peak_type£º Peak_type==1: IFS. Peak_type==2: GC bias corrected IFS.
+%%peak_typeÂ£Âº Peak_type==1: IFS. Peak_type==2: GC bias corrected IFS.
 %%peak_file: The sample name for the hotspots to obtain the IFS score.
 %%%optional parameters:
 %%Several sample names of several hotspot sets
@@ -39,8 +39,8 @@ n=length(sample);
 feature_num=length(peak);
 ma=zeros(feature_num,n);
 for i=1:n
-    path_name=stract(input_path,'/');
-    path_name=stract(path_name,sample{i,1});
+    path_name=strcat(input_path,'/');
+    path_name=strcat(path_name,sample{i,1});
     [feature_data,peak_origin]=IFS_data_obtain(path_name,peak,peak_type);
     ma(:,i)=feature_data;
 end
