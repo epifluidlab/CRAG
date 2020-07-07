@@ -1,5 +1,5 @@
 function val=data_point_estimate(X,Y,intervals)
-%%%%%%%%%The function was used to estimate the value in y axis 
+%%%%%%%%%The function was used to estimate the value in y axis of ROC curve 
 n=length(intervals);
 m=length(X);
 
