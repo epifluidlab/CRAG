@@ -41,6 +41,10 @@ for i=loop_id:loop_id
     fileID = fopen(file_name);
     C = textscan(fileID,'%s %d %d %d');  %%import the bed file of the reads
     fclose(fileID);
+    if isempty(C{1,1})
+        disp('There is no reads in the chromosome!');
+        return;  
+    end
     clear read;
     B=C{1,1};
     [B,index]=sort(B);
