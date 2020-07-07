@@ -1,5 +1,6 @@
 function data_merge(in_path_name,out_path,file_list,loop_id)
-%%%%%%%%%%%%Read the chromosome information
+%%%%%%%%%%%%Merge the IFS score of multi-samples and output the merged IFS
+%%%%%%%%%%%%score
 A=importdata('./Basic_info/chrome_info.txt');
 chr_id=A.textdata;
 chr_length=A.data;
@@ -27,6 +28,12 @@ for i=loop_id:loop_id
         file_name=strcat(data_path,file_list{j,1});
         file_name=strcat(file_name,sub_path);
         file_name=strcat(file_name,chr);
+        file_name=strcat(file_name,'.mat');
+        if exist(file_name,'file')==0
+            er_info=strcat(file_name,'does not exist!');
+            disp(er_info);
+            return;
+        end
         load (file_name);
         loc_a=loc_a+loc;
     end
