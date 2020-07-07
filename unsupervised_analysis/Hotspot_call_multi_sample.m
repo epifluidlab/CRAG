@@ -13,17 +13,24 @@ function Hotspot_call_multi_sample(file_list,input_path,out_name,peak_type,varar
 %%local_p: p-value cut-off for local test
 %%fdr: cut-off
 %%distance: Distance cut-off to merge the significant regions nearby.
-%%enrichment:whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 1.
+%%enrichment:whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 0.
+
+%%%%%%Add the path of the funtions used in this pipeline as workplace
+current_path=pwd;
+lo=strfind(current_path,'/');
+parent_path=current_path(1,1:(lo(end)-1));
+addpath(genpath(parent_path));
+
 if ischar(peak_type)
     peak_type=str2double(peak_type);
 end
-if ischar (file_list) && (contains(filelist,'.xlsx') || contains(filelist,'.xls'))
+if ischar (file_list) && (contains(file_list,'.xlsx') || contains(file_list,'.xls'))
     %%%%%The input is an excel file
     [~,file_list]=xlsread(file_list);
 end
 
 if nargin<4;error('There should be at least four input parameters');end
-if nargin==5;error('Input parameters error£¡');end
+if nargin==5;error('Input parameters error!');end
 
 global_p=0.00001;
 local_p=0.00001;
@@ -75,7 +82,5 @@ if (enrichment==1)
     Hotspot_rand_enrichment(out_name);
     Hotspot_enrichment_fisher(out_name);
 end
-
-
 
 end
