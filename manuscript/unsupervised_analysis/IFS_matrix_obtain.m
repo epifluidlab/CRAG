@@ -4,11 +4,25 @@ function IFS_matrix_obtain(file_list,input_path,out_name,peak_type,peak_file,var
 %variable include all the the files
 %%input_path: The path of all the files
 %%out_name: The output file name (matrix file name)
-%%peak_type£º Peak_type==1: IFS. Peak_type==2: GC bias corrected IFS.
+%%peak_typeï¼š Peak_type==1: IFS. Peak_type==2: GC bias corrected IFS.
 %%peak_file: The sample name for the hotspots to obtain the IFS score.
 %%%optional parameters:
 %%Several sample names of several hotspot sets
-if nargin<5;error('There should be at least two input parameters');end
+
+%%%%%%Add the path of the funtions used in this pipeline as workplace
+current_path=pwd;
+lo=strfind(current_path,'/');
+parent_path=current_path(1,1:(lo(end)-1));
+addpath(genpath(parent_path));
+
+
+if nargin<5;error('There should be at least five input parameters');end
+
+if ischar (file_list) && (contains(file_list,'.xlsx') || contains(file_list,'.xls'))
+    %%%%%The input is an excel file
+    [~,file_list]=xlsread(file_list);
+end
+
 para_val=varargin;
 peak_list{1,1}=peak_file;
 if ~isempty(varargin)
@@ -20,7 +34,7 @@ if ~isempty(varargin)
 end
 
 if (ischar(peak_type))
-    type=str2double(peak_type);
+    peak_type=str2double(peak_type);
 end
 
 n=length(peak_list);
@@ -39,13 +53,13 @@ n=length(sample);
 feature_num=length(peak);
 ma=zeros(feature_num,n);
 for i=1:n
-    path_name=stract(input_path,'/');
-    path_name=stract(path_name,sample{i,1});
+    path_name=strcat(input_path,'/');
+    path_name=strcat(path_name,sample{i,1});
     [feature_data,peak_origin]=IFS_data_obtain(path_name,peak,peak_type);
     ma(:,i)=feature_data;
 end
 
-save((out_name),'ma','peak_num','sample','peak','peak_origin');
+save((out_name),'ma','peak_num','sample','peak','peak_origin','-v7.3');
 %%%%Save the IFS matrix for the current type
 end
 
