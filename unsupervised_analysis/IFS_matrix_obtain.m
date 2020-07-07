@@ -45,7 +45,7 @@ for i=1:n
     ma(:,i)=feature_data;
 end
 
-save((out_name),'ma','peak_num','sample','peak','peak_origin');
+save((out_name),'ma','peak_num','sample','peak','peak_origin','-v7.3');
 %%%%Save the IFS matrix for the current type
 end
 
