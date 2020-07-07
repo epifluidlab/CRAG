@@ -3,8 +3,9 @@ function k_fold_call(fold_info,input_path,out_file_name,peak_type,ith,varargin)
 %%%%%and save the hotspots in out_name/ith/diseasetype/result_n
 %fold_info:the name of an excel file (include the Suffix name). Or a
 %variable include all the the files
-%the excel file or the variable should include three columns:
-%1st, sample_name (String: e.g. C302); 2nd, disease type (String: e.g. breast); 3rd, an interger indicate which fold the sample is belonged to.
+%the excel file or the variable should include three columns:1th,
+%sample_name (String,i.e,C302),2th,disease type (String:i.e.breast),3th,a interger indicate which
+%fold the sample is belonged to.
 
 %%input_path: The path of all the sample files
 
