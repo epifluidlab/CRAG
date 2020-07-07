@@ -5,6 +5,7 @@ function myth_signal_hotspot(hotspot_file,myth_file)
 %%By default, the myth_file should be located in './Basic_info/myth_path'
 %% such as './Basic_info/myth_path/PNAS_healthy/'
 
+
 peak_file=strcat(hotspot_file,'/result_n/peak_all');
 load (peak_file);
 
