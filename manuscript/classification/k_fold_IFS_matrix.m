@@ -1,11 +1,10 @@
-function k_fold_IFS_matrix(fold_info,input_path,out_file_name,peak_type,ith,pos_class)
-%%%%%%%%Based the hotspots in the training set of ith fold,obtain the IFS
-%%%%%%%%of all the hotspots in all the samples, including in the training
-%%%%%%%%set and test set.
+function k_fold_call(fold_info,input_path,out_file_name,peak_type,ith,varargin)
+%%%%%%%%Call hotspots for the hotspots in the training set of ith fold
+%%%%%and save the hotspots in out_name/ith/diseasetype/result_n
 %fold_info:the name of an excel file (include the Suffix name). Or a
 %variable include all the the files
 %the excel file or the variable should include three columns:1th,
-%sample_name (String,i,e,C302),2th,disease type (String:i.e.breast),3th,a interger indicate which
+%sample_name (String,i.e,C302),2th,disease type (String:i.e.breast),3th,a interger indicate which
 %fold the sample is belonged to.
 
 %%input_path: The path of all the sample files
@@ -15,16 +14,22 @@ function k_fold_IFS_matrix(fold_info,input_path,out_file_name,peak_type,ith,pos_
 %%peak_type: 2-call hotspots using IFS after GC bias correction
 
 %%ith: the id of the current fold.
-%%pos_class:a string shows the positive class in the
-%%disease,i.e.breast,if this is a fold-call for
-%%multi-classification,spefiific it as 'None'.
+
+
+%%%optional parameters:
+
+%%global_p: global p-value cut off
+%%local_p: p-value cut-off for local test
+%%fdr: cut-off
+%%distance: Distance cut-off to merge the significant regions nearby.
+%%enrichment:whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 0
+
 
 %%%%%%Add the path of the funtions used in this pipeline as workplace
 current_path=pwd;
 lo=strfind(current_path,'/');
 parent_path=current_path(1,1:(lo(end)-1));
 addpath(genpath(parent_path));
-
 
 
 if ischar(peak_type)
@@ -39,80 +44,60 @@ if ischar (fold_info) && (contains(fold_info,'.xlsx') || contains(fold_info,'.xl
     %%%%%The input is an excel file
     [fold_id,sample_info]=xlsread(fold_info);
 else
-    fold_id=fold_info(:,3);
+    fold_id=cell2mat(fold_info(:,3));
+    if ischar(fold_id)
+       fold_id=str2double(fold_id); 
+    end
     sample_info=fold_info(:,1:2);
 end
 
+if nargin<5;error('There should be at least five input parameters');end
+if nargin==6;error('Input parameters error!');end
+
+global_p=0.00001;
+local_p=0.00001;
+fdr=0.01;
+distance=200;
+enrichment=0;
+para_val=varargin;
+while length(para_val)>=2
+    prop =para_val{1};
+    val=para_val{2};
+    if ischar(val)
+        val=str2double(val);
+    end
+    para_val=para_val(3:end);
+    switch prop
+        case 'global_p'
+            global_p=val;
+        case 'local_p'
+            local_p=val;
+        case 'fdr'
+            fdr=val;
+        case 'distance'
+            distance=val;
+        case 'enrichment'
+            enrichment=val;
+        otherwise
+            error('Input parameters error')
+    end
+end
 path_base=strcat(out_file_name,'/');
 out_name=strcat(path_base,num2str(ith));
-new_out_name=strcat(out_name,'/result_n/');
-system(['mkdir ' new_out_name]);
+system(['mkdir ' out_name]);
 
 train_sample=sample_info(fold_id~=ith,:);
-test_sample=sample_info(fold_id==ith,:);
 
 type_name=unique(train_sample(:,2));
+
 n=length(type_name(:,1));
 out_name=strcat(out_name,'/');
-peak=[];
 for i=1:n
-    peak_list{i,1}=strcat(out_name,type_name{i,1});
-    peak_loc=strcat(peak_list{i,1},'/result_n/peak_all.mat');
-    load (peak_loc);
-    peak=[peak;peak_a];
-end
-peak_a=peak;
-peak_out_name=strcat(new_out_name,'/peak_all.mat');
-save((peak_out_name),'peak_a');
-
-
-if strcmpi(pos_class,'None')
-    for i=1:n
-        %%%%multi-classification, get and save the matrix for each disease type
-        temp_out_name=strcat('train_norm_data',num2str(i));
-        result_out=strcat(new_out_name,temp_out_name);
-        file_loc=strcmpi(train_sample(:,2),type_name{i,1});
-        file_list=train_sample(file_loc,1);
-        IFS_matrix_obtain(file_list(:,1),input_path,result_out,peak_type,out_name);
-    end
-    
-    %%%%%%%%%%get the label for test data set and get the matrix
-    test_label=zeros(length(test_sample(:,1)),1);
-    for j=1:n
-        file_loc=strcmpi(test_sample(:,2),type_name{j,1});
-        test_label(file_loc,1)=j;
-    end
-    temp_out_name='test_norm_data.mat';
-    result_out=strcat(new_out_name,temp_out_name);
-    IFS_matrix_obtain(test_sample(:,1),input_path,result_out,peak_type,out_name);
-    load (result_out);
-    %%%add the test_label information to the data
-    save((result_out),'ma','peak_num','sample','peak','peak_origin','test_label')
-else
-    %%%%%%%%binary classification, get and save the matrix for pos-class
-    %%%%%%%%and negative class
-    %%positive
-    temp_out_name='train_norm_data1.mat';
-    result_out=strcat(new_out_name,temp_out_name);
-    file_loc=strcmpi(train_sample(:,2),pos_class);
-    file_list=train_sample(file_loc,1);
-    IFS_matrix_obtain(file_list,input_path,result_out,peak_type,out_name);
-    %%negative class
-    temp_out_name='train_norm_data2.mat';
-    result_out=strcat(new_out_name,temp_out_name);
-    file_list=train_sample(~file_loc,1);
-    IFS_matrix_obtain(file_list,input_path,result_out,peak_type,out_name);
-    
-    test_label=zeros(length(test_sample(:,1)),1);
-    file_loc=strcmpi(test_sample(:,2),pos_class);
-    test_label(file_loc,1)=1;
-    test_label(~file_loc,1)=-1;
-    temp_out_name='test_norm_data.mat';
-    result_out=strcat(new_out_name,temp_out_name);
-    IFS_matrix_obtain(test_sample(:,1),input_path,result_out,peak_type,out_name);
-    load (result_out);
-    %%%add the test_label information to the data
-    save((result_out),'ma','peak_num','sample','peak','peak_origin','test_label','-v7.3')
+   dis_out_name{i,1}=strcat(out_name,type_name{i,1});
+   system(['mkdir ' dis_out_name{i,1}]);
+   loc=strcmpi(train_sample(:,2),type_name{i,1});
+   current_sample_list=train_sample(loc,1);
+   Hotspot_call_multi_sample(current_sample_list,input_path,dis_out_name{i,1},peak_type,'enrichment',enrichment);
 end
 
 end
