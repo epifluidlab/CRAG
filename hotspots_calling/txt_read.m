@@ -1,5 +1,5 @@
 function txt_read(path_name,loop_id)
-%%%%%%%%%%%%Read the chromosome information  in txt file and calculate IFS for all the fragments
+%%%%%%%%%%%%Read the chromosome information in txt file and calculate IFS for all the fragments
 A=importdata('./Basic_info/chrome_info.txt');
 chr_id=A.textdata;
 chr_length=A.data;
