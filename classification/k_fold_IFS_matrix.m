@@ -39,7 +39,10 @@ if ischar (fold_info) && (contains(fold_info,'.xlsx') || contains(fold_info,'.xl
     %%%%%The input is an excel file
     [fold_id,sample_info]=xlsread(fold_info);
 else
-    fold_id=fold_info(:,3);
+    fold_id=cell2mat(fold_info(:,3));
+    if ischar(fold_id)
+        fold_id=str2double(fold_id);
+    end
     sample_info=fold_info(:,1:2);
 end
 
