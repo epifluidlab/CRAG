@@ -28,7 +28,7 @@ for i=1:fold_number
     load (data_in);
     train_data1=ma;
     pos_num=length(ma(1,:));
-   
+    clear train_label;
     train_label(1:pos_num,1)=1; %%class label for positive samples
     
     data_in=strcat(path_in,'/result_n/train_norm_data2.mat'); %%The matrix for the negative class
