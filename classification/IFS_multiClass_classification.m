@@ -5,7 +5,15 @@ function IFS_multiClass_classification(input_file_path,fold_number,class_num,fea
 %fold_number: The number of the k-fold validation
 %class_num: The types of samples in this classification
 %feature_num: The number of features used.
-
+if ischar(fold_number)
+    fold_number=str2double(fold_number);
+end
+if ischar(feature_num)
+    feature_num=str2double(feature_num);
+end
+if ischar(class_num)
+    class_num=str2double(class_num);
+end
 
 out_file_name=strcat(input_file_path,'/classfication_result.mat');
 pre_score=[];
