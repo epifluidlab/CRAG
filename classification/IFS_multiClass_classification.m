@@ -33,6 +33,7 @@ for i=1:fold_number
     b_str='=ma;';
     a_str='train_data';
     
+    clear pattern;
     %%%%%load the matrix for each type of samples in the training set
     for j=1:class_num
         temp_file=strcat('/result_n/train_norm_data',num2str(j));
@@ -80,6 +81,7 @@ for i=1:fold_number
     train_data=[];
     a=0;
     clear train_label;
+    
     for j=1:class_num
         t_str=strcat(a_str,num2str(j));
         temp_comand_A='temp_data=';
@@ -87,7 +89,7 @@ for i=1:fold_number
         temp_comand=strcat(temp_comand_A,temp_comand_B);
         eval(temp_comand);
         train_data=[train_data temp_data];
-        b=a+length(train_data(1,:));
+        b=a+length(temp_data(1,:));
         train_label((a+1):b,1)=j;
         a=b;
     end
