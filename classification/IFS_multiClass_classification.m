@@ -102,7 +102,7 @@ for i=1:fold_number
             X=[train_data(:,train_label==j) train_data(:,train_label==k)]';
             Y=[j*ones(sum(train_label==j),1);k*ones(sum(train_label==k),1)];
             nb(j,k).mb=fitctree(X,Y);
-            nb(k,j).mb=nb(1,2).mb;
+            nb(k,j).mb=nb(j,k).mb;
         end
     end
     
