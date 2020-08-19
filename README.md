@@ -35,7 +35,8 @@
 	python bam_read.py -in BH01.chr22.bam -out test_dir
 	matlab -nodisplay -r 'CRAG test_dir 1; exit;' 	
 	```
-	
+**You need at least 10Gb memory to finish the test example**. At our server, it costs about 10 mins at CentOS 7 with 10Gb memory and one CPU core: Intel(R) Xeon(R) CPU E5-2695 v3 @ 2.30GHz	
+
 This should produce the following files (inside test_dir/result_n/):
 	* the hotspots (peak_all.mat, peaks.bed), 
 	* fragmentation pattern around hotspots (IFS_plot.fig, IFS_plot.pdf)
@@ -43,11 +44,12 @@ This should produce the following files (inside test_dir/result_n/):
 
 ## Installation
 #### Prerequisites
-* Linux, Mac OSX, and Windows
+* Linux, Mac OSX, and Windows (with at least 10Gb memory for each CPU core)
 * Matlab 2019b
 * python 2.7 
 * pysam 0.12.0.1 or above
 * samtools 1.9
+
 
 #### required files
 * Indexed Bam file (paired-end whole-genome sequencing, recommend to have at least 400 million fragments in autosomes after the samtools filtering step. If you want to call hotspots for several chrommsomes (not the whole autosome), you can provide the bam file only with the corresponding chromosomes.)
