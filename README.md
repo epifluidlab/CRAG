@@ -35,6 +35,8 @@
 	python bam_read.py -in BH01.chr22.bam -out test_dir
 	matlab -nodisplay -r 'CRAG test_dir 1; exit;' 	
 	```
+You will get a lot of WARNING message about no reads in chromosome since we only provided reads in chr22 at the test bam file. 
+
 **You need at least 10Gb memory to finish the test example**. At our server, it costs about 10 mins at CentOS 7 with 10Gb memory and one CPU core: Intel(R) Xeon(R) CPU E5-2695 v3 @ 2.30GHz	
 
 This should produce the following files (inside test_dir/result_n/):
