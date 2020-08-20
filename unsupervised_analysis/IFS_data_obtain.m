@@ -77,14 +77,14 @@ else
             t_file=strcat(t_file,'.mat');
             if exist(t_file,'file')~=0
                 
-                G_name='./Basic_info/GC/';
+                G_name='Basic_info/GC/';
                 G_name=strcat(G_name,chrm);
                 load (G_name);
                 loc_g=loc;
                 
                 %%%%%%%load mappability
-                path(path,'./Basic_info/mappability/');
-                m_name='./Basic_info/mappability/';
+                path(path,'Basic_info/mappability/');
+                m_name='Basic_info/mappability/';
                 m_name=strcat(m_name,chrm);
                 m_name=strcat(m_name,'_m.mat');  %%get the region with no mappbility
                 load (m_name);
@@ -158,5 +158,5 @@ end
 
 feature_data=feature;
 
-end
 
+end
