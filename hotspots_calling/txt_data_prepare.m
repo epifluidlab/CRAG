@@ -1,10 +1,10 @@
 function [loc,dark_flag,read]=txt_data_prepare(read,chr,region_len)
-path(path,'./Basic_info/');
+
 [data,txt]=xlsread('Blacklist_hg19.xlsx');
 loc_black=strcmpi(txt(:,1),chr);  %%get the black region
 
-path(path,'./Basic_info/mappability/');
-m_name='./Basic_info/mappability/';
+path(path,'Basic_info/mappability/');
+m_name='Basic_info/mappability/';
 
 m_name=strcat(m_name,chr);
 m_name=strcat(m_name,'_m.mat');  %%get the mappability scores
