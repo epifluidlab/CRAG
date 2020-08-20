@@ -3,16 +3,15 @@ function Hotspot_CTCF(data_name)
 %%%%%%%%%data_name: The file name of the data set. i.e. BH01
 
 
-file_path = strcat('./',data_name);
+file_path = data_name;
 out_res= strcat(file_path,'/result_n/');
 file_path = strcat(file_path,'/result_n/peak_all.mat');
 
 load (file_path);
 
-path(path,'./Basic_info/');
-load hg19_CTCF.mat;  %%The CTCF information
+load Basic_info/hg19_CTCF.mat;  %%The CTCF information
 
-load chromosome_info.mat; %%The chromosome information
+load Basic_info/chromosome_info.mat; %%The chromosome information
 
 count_s=zeros(4001,2);
 count_s(:,1)=(1:4001)';
