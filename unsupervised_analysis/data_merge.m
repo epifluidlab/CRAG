@@ -1,19 +1,20 @@
 function data_merge(in_path_name,out_path,file_list,loop_id)
-%%%%%%%%%%%%Merge the IFS score (in the current chromosome (loop_id)) of multi-samples (file_list) in 'in_path_name' and output the merged IFS
-%%%%%%%%%%%%score in out_path (out_path/data_n/).
-A=importdata('./Basic_info/chrome_info.txt');
+%%%%%%%%%%%%Merge the IFS score of multi-samples and output the merged IFS
+%%%%%%%%%%%%score
+A=importdata('Basic_info/chrome_info.txt');
 chr_id=A.textdata;
 chr_length=A.data;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-path_name=strcat('./',out_path);
+path_name=out_path;
 path_name=strcat(path_name,'/');
 
 produce_file=strcat(path_name,'data_n');  %%%%%% fragment length
 sub_path='/data_n/';
 
-
+if ~exist(produce_file,'dir')
 system(['mkdir ' produce_file]);
+end
 
 data_path=in_path_name;
 data_path=strcat(data_path,'/');
