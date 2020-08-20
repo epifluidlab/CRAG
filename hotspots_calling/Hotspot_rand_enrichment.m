@@ -3,21 +3,24 @@ function Hotspot_rand_enrichment(data_name)
 %%%%%%%would laters used to chromHMM enrichment
 %%%%%%%%%data_name: The file name of the data set. i.e. BH01
 
-file_path = strcat('./',data_name);
+file_path = data_name;
 out_res= strcat(file_path,'/result_n/');
 file_path = strcat(file_path,'/result_n/peak_all.mat');
 
 
 load (file_path);   %%load all the hotspots data
 
-path(path,'./Basic_info/');
+current_path=pwd;
+lo=strfind(current_path,'/');
+parent_path=current_path(1,1:(lo(end)-1));
+dir_path=strcat(parent_path,'/Basic_info/chrm_state/');
 
 
-load ./Basic_info/chromosome_info.mat;
+load Basic_info/chromosome_info.mat;
 
-path(path,'./Basic_info/chrm_state/');   %%chr1_m.mat
+path(path,'Basic_info/chrm_state/');   %%chr1_m.mat
 
-listing = dir('./Basic_info/chrm_state/');
+listing = dir(dir_path);
 
 
 cou=0;
@@ -37,7 +40,7 @@ ma=zeros(15,n);
 chrm_state=zeros(15,n);
 
 for i=1:n
-    te=strcat('./Basic_info/chrm_state/',name{i,1});
+    te=strcat('Basic_info/chrm_state/',name{i,1});
     for j=1:22
         r_data=peak_a(peak_a(:,1)==j,2:3); %%Hotspots in the current chromosome
         if ~isempty(r_data)
