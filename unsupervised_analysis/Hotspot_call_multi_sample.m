@@ -62,12 +62,12 @@ while length(para_val)>=2
 end
 
 %%%%%%%%merge all IFS in the file list and save them in out_name/data_n
-for i=1:22
+parfor i=1:22
     data_merge(input_path,out_name,file_list,i);
 end
 
 %%%%%%%Call hotspots
-for i=1:22
+parfor i=1:22
     Hotspot_call(out_name,peak_type,i,global_p,local_p,fdr);
 end
 %%%%%%merge hotspots
