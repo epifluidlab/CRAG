@@ -42,8 +42,8 @@ for i=1:length(ma(:,1))
     end
 end
 
-[id_index,y_name]=xlsread('./Basic_info/cell.xlsx');   %%Cell types
-[~,x_name]=xlsread('./Basic_info/state.xlsx'); %%chromHmm names
+[id_index,y_name]=xlsread('Basic_info/cell.xlsx');   %%Cell types
+[~,x_name]=xlsread('Basic_info/state.xlsx'); %%chromHmm names
 
 p_ma=p_ma(:,id_index);
 
