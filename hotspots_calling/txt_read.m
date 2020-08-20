@@ -9,7 +9,9 @@ path_name=strcat('./',path_name);
 path_name=strcat(path_name,'/');
 produce_file=strcat(path_name,'data_n');  %%%%%% fragment length
 
-system(['mkdir ' produce_file]);
+if ~exist(produce_file,'dir')
+   system(['mkdir ' produce_file]);
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 path(path,path_name);
@@ -42,8 +44,9 @@ for i=loop_id:loop_id
     C = textscan(fileID,'%s %d %d %d');  %%import the bed file of the reads
     fclose(fileID);
     if isempty(C{1,1})
-        disp('There is no reads in the chromosome!');
-        return;  
+        out_info=['WARNING: there is no reads in Chromosome' num2str(i)];
+        disp(out_info);
+        return;
     end
     clear read;
     B=C{1,1};
