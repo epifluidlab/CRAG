@@ -19,14 +19,14 @@ if (nargin==3)
     threshold_q=0.01;
 end
 
-path_name=strcat('./',path_name);
 path_name=strcat(path_name,'/');
 
 produce_file=strcat(path_name,'data_n/'); %%input file of the IFS
 
 out_path=strcat(path_name,'outpeak_n/'); %%output peak files (before merging process)
-
+if ~exist(out_path,'dir')
 system(['mkdir ' out_path]);
+end
 
 path(path,produce_file);
 
@@ -60,8 +60,7 @@ if (peak_type == 1) %%%%Call peaks using IFS
     load (t_name);
     
     %%%%%%%load mappability score of the current window
-    path(path,'./Basic_info/mappability/');
-    m_name='./Basic_info/mappability/';
+    m_name='Basic_info/mappability/';
     
     m_name=strcat(m_name,chr);
     m_name=strcat(m_name,'_m.mat');  %%get the region with no mappbility
@@ -147,7 +146,7 @@ else
         %%%%%%%%%%%chromosome id%%%%%
         chr=strcat('chr',num2str(ii));
         %%%%%%%%%%%load GC content%%%%%%%%%%%
-        G_name='./Basic_info/GC/';
+        G_name='Basic_info/GC/';
         G_name=strcat(G_name,chr);
         load (G_name);
         loc_g=loc;
@@ -163,8 +162,7 @@ else
         load (t_name);
         
         %%%%%%%load mappability
-        path(path,'./Basic_info/mappability/');
-        m_name='./Basic_info/mappability/';
+        m_name='Basic_info/mappability/';
         m_name=strcat(m_name,chr);
         m_name=strcat(m_name,'_m.mat');
         load (m_name);
