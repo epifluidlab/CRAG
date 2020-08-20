@@ -78,7 +78,7 @@ if strcmpi(pos_class,'None')
         file_list=train_sample(file_loc,1);
         IFS_matrix_obtain(file_list(:,1),input_path,result_out,peak_type,out_name);
     end
-    
+
     %%%%%%%%%%get the label for test data set and get the matrix
     test_label=zeros(length(test_sample(:,1)),1);
     for j=1:n
@@ -105,7 +105,7 @@ else
     result_out=strcat(new_out_name,temp_out_name);
     file_list=train_sample(~file_loc,1);
     IFS_matrix_obtain(file_list,input_path,result_out,peak_type,out_name);
-    
+
     test_label=zeros(length(test_sample(:,1)),1);
     file_loc=strcmpi(test_sample(:,2),pos_class);
     test_label(file_loc,1)=1;
