@@ -61,6 +61,10 @@ while length(para_val)>=2
     end
 end
 
+if ~exist(out_name,'dir')
+    system(['mkdir ' out_name]);
+end
+
 %%%%%%%%merge all IFS in the file list and save them in out_name/data_n
 parfor i=1:22
     data_merge(input_path,out_name,file_list,i);
