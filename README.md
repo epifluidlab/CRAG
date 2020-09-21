@@ -65,7 +65,7 @@ This should produce the following files (inside test_dir/result_n/):
 ### Sample pre-processing and read
 ```
 samtools view -bh -f 3 -F 3852 -q 30 input.bam > output.filtered.bam
-
+samtools index output.filtered.bam
 python bam_read.py -in output.filtered.bam -out result_dir
 ```
 
