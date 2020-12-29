@@ -68,6 +68,6 @@ end
 
 temp1=temp1(flag_temp(:,1)==1,1);%the IFS score of the local 10kb windows
 lamda1=mean(temp1); %%lamda for 10 kb
-p=poisscdf(density(i,1),lamda1);  %p-value for local 10kb
+p=max(poisscdf(density(i,1),lamda1),p);  %p-value for local 10kb
 
 end
