@@ -266,7 +266,7 @@ cd CRAG/classification
 	* Parameters:
 		* fold_info: an file name of excel (.xlsx or xls) file, which contain all the sample names (string),category (string) and fold id (interger,i.e.1,2,3...), or a cell variable (N * 3) contain all this information. For example, 'HCC_healthy_fold.xlsx', which contain three column, in each row,the first column is its sample name, the second column is its category ('HCC' or 'healthy') and the last column is the fold id it begongs to (i.e. 5).
 		* input_path: the path that the fragment information of these samples located in (i.e.PNAS).
-		* out_name_name: The folder the all the output should be saved (i.e. HCC_healthy).
+		* out_name: The folder the all the output should be saved (i.e. HCC_healthy).
 		* peak_type: 1-call hotspots without GC bias correction; 2- call hotspots based on IFS after GC bias correction
 		* ith: call hotspots for which fold in the cross validation (i.e. 2).
 	* Optional parameters (the same with hotspot calling in single sample):
@@ -290,7 +290,7 @@ cd CRAG/classification
 	* Parameters:
 		* fold_info: an file name of excel (.xlsx or xls) file, which contain all the sample names (string),category (string) and fold id (interger,i.e.1,2,3...), or a cell variable (N * 3) contain all this information. For example, 'HCC_healthy_fold.xlsx', which contain three column, in each row,the first column is its sample name, the second column is its category ('HCC' or 'healthy') and the last column is the fold id it begongs to (i.e. 5).
 		* input_path: the path that the fragment information of these samples located in (i.e.PNAS).
-		* out_name_name: The folder the all the output should be saved (i.e. HCC_healthy).
+		* out_name: The folder the all the output should be saved (i.e. HCC_healthy).
 		* peak_type: 1-get IFS of the hotspots without GC bias correction; 2- get IFS of hotspots based on IFS after GC bias correctionand correct the IFS.
 		* ith: ontain the IFS matrix for which fold in the cross validation (i.e. 2).
 		* pos_class:a string shows the positive class in the classification, i.e. 'HCC', if this is a fold-validation for multi-classification,spefiific it as 'None'.
