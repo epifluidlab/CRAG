@@ -49,6 +49,8 @@ for i=1:fold_number
     
     sample_size=min(sample_num);
     
+     %%%%%%%Calculate the centroid of each group.
+    
     for j=1:class_num
         temp_file=strcat('/result_n/train_norm_data',num2str(j));
         data_in=strcat(path_in,temp_file); %%The matrix for jth class
@@ -66,9 +68,8 @@ for i=1:fold_number
         clear ma;
     end
     
-    %%%%%%%Replace the centroid of the group with the max sample size to its
-    %%%%%%%down-sampled samples.
-    
+   
+    %%%%Top 2 predictor
     m=length(test_data(1,:));
     clear lab;
     for j=1:m
