@@ -1,14 +1,10 @@
-function IFS_binaryClass_classification(input_file_path,fold_number,feature_num)
+function IFS_binaryClass_classification(input_file_path,fold_number)
 %%%%%%%Do binary classification for IFS matrix using liner svm
 %input_file_path, the file name saving the IFS matrix for all the fold
 %fold_number: The number of the k-fold validation
-%feature_num: The number of features used.
 
 if ischar(fold_number)
     fold_number=str2double(fold_number);
-end
-if ischar(feature_num)
-    feature_num=str2double(feature_num);
 end
 
 
@@ -28,7 +24,7 @@ for i=1:fold_number
     load (data_in);
     train_data1=ma;
     pos_num=length(ma(1,:));
-   
+    clear train_label;
     train_label(1:pos_num,1)=1; %%class label for positive samples
     
     data_in=strcat(path_in,'/result_n/train_norm_data2.mat'); %%The matrix for the negative class
@@ -41,18 +37,11 @@ for i=1:fold_number
     load (data_in);
     test_data=ma;
     
-    vari1=var(train_data1')';
-    vari2=var(train_data2')';
-    
-    index=(1:length(train_data1(:,1)))';
-    index(:,2)=vari1+vari2;
-    
-    index=sortrows(index,2); %%All the features were sorted by the features'
-    %%variance in each of the two groups
+
     
     %%Only keep the IFS for the selected features 
-    train_data=[train_data1(index(1:feature_num,1),:) train_data2(index(1:feature_num,1),:)];
-    test_data=test_data(index(1:feature_num,1),:);
+    train_data=[train_data1 train_data2];
+    
     
     %%%%%%%%%%%%Divide the x axis to 0,0.01,0.02,...1
     intervals= linspace(0, 1, 101);
