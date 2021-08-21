@@ -54,7 +54,7 @@ This should produce the following files (inside test_dir/result_n/):
 
 
 #### required files
-* Indexed Bam file (paired-end whole-genome sequencing, recommend to have at least 400 million fragments in autosomes after the samtools filtering step. If you want to call hotspots for several chrommsomes (not the whole autosome), you can provide the bam file only with the corresponding chromosomes.)
+* Indexed Bam file (paired-end whole-genome sequencing, recommend to have at least 200 million fragments in autosomes after the samtools filtering step. If you want to call hotspots for several chrommsomes (not the whole autosome), you can provide the bam file only with the corresponding chromosomes.)
 * Basic_info directory **Always link the Basic_info/ under your current working directory** (example is showed in Quick Start part)
 * GC content files (provided in [zenodo.org](https://zenodo.org/record/3928546/files/GC.zip) for hg19/GRch37, download it under Basic_info directory and unzip it)
 * Mappability files (provided in [zenodo.org](https://zenodo.org/record/3928546/files/mappability.zip) for hg19/GRch37, download it under Basic_info directory and unzip it)
@@ -82,16 +82,14 @@ matlab -nodisplay -r 'CRAG result_dir 1; exit;'
 ```
 #### Options for hotspot calling
 
-* global p value cut-off: argument: 'global_p', a positive number between 0 to 1. default: 1e-5. 
-* local p value cut-off: argument: 'local_p', a positive number between 0 to 1.default: 1e-5
-* fdr cut-off:argument: 'fdr', a positive number between 0 to 1. default: 0.01
+* fdr cut-off:argument: 'fdr', a positive number between 0 to 1. default: 0.20
 * hotspot distance for merging: argument: 'distance', a positive integer. default: 200
 * whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 1. 
 
 Example code with option specified:
-`CRAG('result_dir',1,'local_p',0.001,'distance',300,'enrichment',0)`
+`CRAG('result_dir',1,'distance',300,'enrichment',0)`
 
-This command will call hotspots in 'result_dir', using IFS without GC-bias correction, with global p value cut-off = 0.00001, local p value cut-off = 0.001 and fdr cut-off = 0.01. After the significant regions were detected, the regions nearby (with distance less than 300bp) were merged. And the pipeline will produce four files (two hotspot files: hotspots.bed and hotspots.mat and two files of the fragmentation pattern around hotspots (IFS_plot.fig, IFS_plot.pdf))in result_dir/result/n.
+This command will call hotspots in 'result_dir', using IFS without GC-bias correction, with fdr cut-off = 0.01. After the significant regions were detected, the regions nearby (with distance less than 300bp) were merged. And the pipeline will produce four files (two hotspot files: hotspots.bed and hotspots.mat and two files of the fragmentation pattern around hotspots (IFS_plot.fig, IFS_plot.pdf))in result_dir/result/n.
 
 ### Unsupervised clustering, PCA, and t-SNE
 You will need to run the script 'bam_read.py' to read the fragment for all the samples and write them to txt files.
@@ -270,8 +268,6 @@ cd CRAG/classification
 		* peak_type: 1-call hotspots without GC bias correction; 2- call hotspots based on IFS after GC bias correction
 		* ith: call hotspots for which fold in the cross validation (i.e. 2).
 	* Optional parameters (the same with hotspot calling in single sample):
-		* global_p: global p-value cut off
-		* local_p: p-value cut-off for local test
 		* fdr: cut-off
 		* distance: Distance cut-off to merge the significant regions nearby.
 		* enrichment:whether or not do enrichment for the hotspots.		
@@ -318,10 +314,9 @@ e.g.
 	* Parameters:
 		* input_file_path: The file of the matrix file, e.g. 'HCC_healthy'
 		* fold_number: How many folds are in the validation, e.g. 10
-		* feature_num: The number of features used.
 	* Example code:
 		```
-		IFS_binaryClass_classification('HCC_healthy',10,30000)
+		IFS_binaryClass_classification('HCC_healthy',10)
 		```
 	After this command, the program would perform 10-fold validation classification in the folder 'HCC_healthy', using the most stable 30,000 hostpots as features, and liner svm as model. At last, in the floder 'HCC_healthy/', there would be two figures (ROC.fig and ROC.PDF), also there would be a .mat file (classfication_result.mat), which contains all the detail information in the classification.
 
@@ -334,12 +329,11 @@ e.g.
 		* input_file_path: The file of the matrix file, e.g. 'TOO'
 		* fold_number: How many folds are in the validation, e.g. 10
 		* class_num: Howm many categories are in this classification, e.g. 5
-		* feature_num: The number of features used (for the step in decision tree).
 	* Example code:
 		```
-		IFS_multiClass_classification('TOO',10,5,100000)
+		IFS_multiClass_classification('TOO',10,5)
 		```
-	After this command, the program would perform 10-fold validation classification in the folder 'TOO', using centroid distance to do top 2 predictions, and then the most stable 100,000 hostpots as features, and decision tree as model were used to decide top 1 prediction. At last, in the floder 'TOO/', there would be a .mat file (classfication_result.mat), which contains all the detail information in the classification:
+	After this command, the program would perform 10-fold validation classification in the folder 'TOO', using centroid distance to do top 2 predictions, and then all the hostpots as features, and decision tree as model were used to decide top 1 prediction. At last, in the floder 'TOO/', there would be a .mat file (classfication_result.mat), which contains all the detail information in the classification:
 		* The furst two columns: top 2 predictor predicted by centroid distance
 		* The third column: The top 1 predictor predicted by decision tree
 		* The forth column: The true class label
