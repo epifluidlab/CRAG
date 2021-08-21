@@ -51,26 +51,24 @@ the folder 'multi_cancer' should contain all the fragment information files of t
 After run this two command, in TOO/2/Breast cancer/, TOO/2/lung cancer/,TOO/2/ovarian cancer/ and TOO/2/Pancreatic cancer/. there should be a file result_n in each of these folers and all these files should contain the hotspot files which are the same with above. Also, in TOO/2/result_n/, there should exist six matrix files:
 train_norm_data1.mat, train_norm_data2.mat, train_norm_data3.mat,train_norm_data4.mat,train_norm_data5.mat,test_norm_data.mat.These matrixs are the IFS data for the five cancer types in the training set and all the samples in the test set.
 
-(5)Function: IFS_binaryClass_classification(input_file_path,fold_number,feature_num) could be used to do classification for two-class problem (liner svm model).
+(5)Function: IFS_binaryClass_classification(input_file_path,fold_number) could be used to do classification for two-class problem (liner svm model).
 
 the parameters are shown as follow:
 input_file_path: The file of the matrix file, e.g. 'HCC_healthy'
 fold_number: How many folds are in the validation, e.g. 10
-feature_num: The number of features used.
 
 e.g.
-IFS_binaryClass_classification('HCC_healthy',10,30000), after this command, the program would perform 10-fold validation classification in the folder 'HCC_healthy', using the most stable 30,000 hostpots as features, and liner svm as model. At last, in the floder 'HCC_healthy/', there would be two figures (ROC.fig and ROC.PDF), also there would be a .mat file (classfication_result.mat), which contains all the detail information in the classification.
+IFS_binaryClass_classification('HCC_healthy',10), after this command, the program would perform 10-fold validation classification in the folder 'HCC_healthy', using all the hostpots as features, and liner svm as model. At last, in the floder 'HCC_healthy/', there would be two figures (ROC.fig and ROC.PDF), also there would be a .mat file (classfication_result.mat), which contains all the detail information in the classification.
 
-(6) Function: IFS_multiClass_classification(input_file_path,fold_number,class_num,feature_num) could be used to do multi-classification for multi-classification problem (TOO).
+(6) Function: IFS_multiClass_classification(input_file_path,fold_number,class_num) could be used to do multi-classification for multi-classification problem (TOO).
 
 the parameters are shown as follow:
 input_file_path: The file of the matrix file, e.g. 'TOO'
 fold_number: How many folds are in the validation, e.g. 10
 class_num: Howm many categories are in this classification, e.g. 5
-feature_num: The number of features used (decision tree).
 
 e.g.
-IFS_multiClass_classification('TOO',10,5,100000), after this command, the program would perform 10-fold validation classification in the folder 'TOO', using centroid distance to do top 2 predictions, and then the most stable 100,000 hostpots as features, and decision tree as model were used to decide top 1 prediction. At last, in the floder 'TOO/', there would be a .mat file (classfication_result.mat), which contains all the detail information in the classification:
+IFS_multiClass_classification('TOO',10,5), after this command, the program would perform 10-fold validation classification in the folder 'TOO', using centroid distance to do top 2 predictions, and then the most stable 100,000 hostpots as features, and decision tree as model were used to decide top 1 prediction. At last, in the floder 'TOO/', there would be a .mat file (classfication_result.mat), which contains all the detail information in the classification:
 %%The furst two columns: top 2 predictor predicted by centroid distance
 %%The third column: The top 1 predictor predicted by decision tree
 %%The forth column: The true class label
