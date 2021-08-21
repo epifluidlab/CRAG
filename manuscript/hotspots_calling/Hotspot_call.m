@@ -1,32 +1,23 @@
-function Hotspot_call(path_name,peak_type,loop_id,threshold_p,local_p,threshold_q)
+function Hotspot_call(path_name,peak_type,loop_id,threshold_q)
+
 %%%%%%path_name:the file name which you want to call hotspots: i.e.BH01
 %%%%%peak_type:call the hotspots based on original fragmentation (1) or GC-bias
 %%%%%corrected fragmentation (2).
 %%%%%loop_id: chromsome id
-%%%%threshold_p: global p-value cut-off
-%%%%local_p:local p-value cut-off
 %%%%threshold_q: fdr cut-off
-if (nargin==5)
-    threshold_q=0.01;   %%FDR cut-off
-end
-if (nargin==4)
-    local_p=0.00001; %%P-value cut-off
-    threshold_q=0.01;
-end
+
 if (nargin==3)
-    threshold_p=0.00001;
-    local_p=0.00001;
-    threshold_q=0.01;
+    threshold_q=0.2;
 end
 
-path_name=strcat('./',path_name);
 path_name=strcat(path_name,'/');
 
 produce_file=strcat(path_name,'data_n/'); %%input file of the IFS
 
 out_path=strcat(path_name,'outpeak_n/'); %%output peak files (before merging process)
-
-system(['mkdir ' out_path]);
+if ~exist(out_path,'dir')
+    system(['mkdir ' out_path]);
+end
 
 path(path,produce_file);
 
@@ -60,8 +51,7 @@ if (peak_type == 1) %%%%Call peaks using IFS
     load (t_name);
     
     %%%%%%%load mappability score of the current window
-    path(path,'./Basic_info/mappability/');
-    m_name='./Basic_info/mappability/';
+    m_name='Basic_info/mappability/';
     
     m_name=strcat(m_name,chr);
     m_name=strcat(m_name,'_m.mat');  %%get the region with no mappbility
@@ -82,7 +72,7 @@ if (peak_type == 1) %%%%Call peaks using IFS
         region(cou_candidate,1)=a; %%start location
         region(cou_candidate,2)=b; %%end location
         region(cou_candidate,3)=sum(loc(a:b,1));%%the total IFS of the current window
-        if (sum(dark_flag(a:b,1)) == window_width && mean(map_b(a:b,1)) >= 0.9 && region(cou_candidate,3) > 0)
+        if (sum(dark_flag(a:b,1)) == window_width && mean(map_b(a:b,1)) >= 0.9)
             %%filter the region with dark regoion or low mappbility (avergae mappbiliaty less than 0.9)
             %%Only the windows with at least one fragment were considered.
             flag_bin(cou_candidate,1)=1;
@@ -96,27 +86,34 @@ if (peak_type == 1) %%%%Call peaks using IFS
     
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    pd=fitdist(temp_density,'Poisson');
-    %fit ladma for (global) possion distribution ;
+    if (mean(ceil(temp_density))>=std(ceil(temp_density))^2)
+        cdf_type=2;
+        pd=poissfit(ceil(temp_density));
+    else
+        cdf_type=1;
+        pd=fitdist(ceil(temp_density),'NegativeBinomial');
+    end
+    %fit ladma for (global) NB distribution ;
     
     density=region(:,3);
     
     %%%%%%%%%%%%%detect peak region%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    p_local_cut=local_p;  %threshold of p-value in the local region
     n=length(region);
     final_region=zeros(sum(flag_bin),6);
     cou=0;
     for i=1:n
         if flag_bin(i,1)==1 %%For the candidate windows
-            probability = cdf(pd,region(i,3));%%p-value for global possion test
-            if probability <= threshold_p %%Only the windows pass the cut-off were considered further
-                cou=cou+1;
-                final_region(cou,1:3)=region(i,1:3);
-                final_region(cou,4)=probability; %%p-value for global
-                final_region(cou,5)=peak_local(i,density,flag_bin,1,n,p_local_cut,window_width);
-                %%Using function 'peak_local' to calculate the local
-                %%p-value
+            if (cdf_type==1)
+                probability = cdf(pd,region(i,3));%%p-value for global NB test
+            else
+                probability = poisscdf(region(i,3),pd);
             end
+            cou=cou+1;
+            final_region(cou,1:3)=region(i,1:3);
+            final_region(cou,4)=probability; %%p-value for global
+            final_region(cou,5)=peak_local(i,density,flag_bin,1,n,window_width);
+            %%Using function 'peak_local' to calculate the local
+            %%p-value
         end
     end
     
@@ -127,13 +124,13 @@ if (peak_type == 1) %%%%Call peaks using IFS
     %%%%%%%%%%%%%%%%%%%FDR%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     p=ones(sum(flag_bin),1);
     cou=length(final_region(:,1));
-    p(1:cou,1)=final_region(:,4);
-    fdr=mafdr(p,'BHFDR',true);
+    p(1:cou,1)=max(final_region(:,4),final_region(:,5));
+    
+    [~,fdr]=mafdr(p,'BHFDR',true);
     %%Using Benjamini and Hochberg correction
     %%to obtain the FDR for global p-value
     final_region(:,6)=fdr(1:cou,1);
-    peak=final_region(final_region(:,6) <= threshold_q & final_region(:,5) <= p_local_cut,:);
-    %%The sliding windows with fdr, local p-value and global p-value
+    peak=final_region(final_region(:,6) <= threshold_q,:);
     %%pass the cut-off were set as hotspots.
     
     peak_file=strcat(out_path,chr);
@@ -147,7 +144,7 @@ else
         %%%%%%%%%%%chromosome id%%%%%
         chr=strcat('chr',num2str(ii));
         %%%%%%%%%%%load GC content%%%%%%%%%%%
-        G_name='./Basic_info/GC/';
+        G_name='Basic_info/GC/';
         G_name=strcat(G_name,chr);
         load (G_name);
         loc_g=loc;
@@ -163,8 +160,7 @@ else
         load (t_name);
         
         %%%%%%%load mappability
-        path(path,'./Basic_info/mappability/');
-        m_name='./Basic_info/mappability/';
+        m_name='Basic_info/mappability/';
         m_name=strcat(m_name,chr);
         m_name=strcat(m_name,'_m.mat');
         load (m_name);
@@ -188,7 +184,7 @@ else
             end
             
             region(cou_candidate,5)=mean(map_b(a:b,1));%%average mappability score
-            if (sum(dark_flag(a:b,1)) == window_width) && region(cou_candidate,3)>0 && region(cou_candidate,5)>=0.90 %%filter the region with dark regoion or no mappbility
+            if (sum(dark_flag(a:b,1)) == window_width) && region(cou_candidate,5)>=0.90 %%filter the region with dark regoion or no mappbility
                 %%filter the region with dark regoion or low mappbility (avergae mappbiliaty less than 0.9)
                 %%Only the windows with at least one fragment were considered.
                 flag_bin(cou_candidate,1)=1;
@@ -216,26 +212,35 @@ else
         region(index,3)=val; %%GC bias corrected IFS
         temp_density=region(flag_bin==1,3);
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        pd=fitdist(temp_density,'Poisson');
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        if (mean(ceil(temp_density))>=std(ceil(temp_density))^2)
+            cdf_type=2;
+            pd=poissfit(ceil(temp_density));
+        else
+            cdf_type=1;
+            pd=fitdist(ceil(temp_density),'NegativeBinomial');
+        end
+        %fit ladma for (global) NB distribution ;
+        
         density=region(:,3);
         
         %%%%%%%%%%%%%detect peak region%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        p_local_cut=local_p;  %threshold of p-value in the local region
         n=length(region);
         final_region=zeros(sum(flag_bin),6);
         cou=0;
         for i=1:n
-            if flag_bin(i,1)==1
-                probability = cdf(pd,region(i,3));
-                if probability <= threshold_p
-                    cou=cou+1;
-                    final_region(cou,1:2)=region(i,1:2);
-                    final_region(cou,3)=region(i,3);
-                    final_region(cou,4)=probability;
-                    final_region(cou,5)=peak_local(i,density,flag_bin,1,n,p_local_cut,window_width);
-                    %%Using function 'peak_local' to calculate the local
-                    %%p-value
+            if flag_bin(i,1)==1 %%For the candidate windows
+                if (cdf_type==1)
+                    probability = cdf(pd,region(i,3));%%p-value for global NB test
+                else
+                    probability = poisscdf(region(i,3),pd);
                 end
+                cou=cou+1;
+                final_region(cou,1:3)=region(i,1:3);
+                final_region(cou,4)=probability; %%p-value for global
+                final_region(cou,5)=peak_local(i,density,flag_bin,1,n,window_width);
+                %%Using function 'peak_local' to calculate the local
+                %%p-value
             end
         end
         
@@ -246,17 +251,19 @@ else
         %%%%%%%%%%%%%%%%%%%FDR%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         p=ones(sum(flag_bin),1);
         cou=length(final_region(:,1));
-        p(1:cou,1)=final_region(:,4);
-        fdr=mafdr(p,'BHFDR',true);
+        p(1:cou,1)=max(final_region(:,4),final_region(:,5));
+        [~,fdr]=mafdr(p,'BHFDR',true);
+        %%Using Benjamini and Hochberg correction
+        %%to obtain the FDR for global p-value
         final_region(:,6)=fdr(1:cou,1);
-        peak=final_region(final_region(:,6) <= threshold_q & final_region(:,5) <= p_local_cut ,:);
-        %%The sliding windows with fdr, local p-value and global p-value
+        peak=final_region(final_region(:,6) <= threshold_q,:);
         %%pass the cut-off were set as hotspots.
+        
         peak_file=strcat(out_path,chr);
         peak_file=strcat(peak_file,'_peak.mat');
         save((peak_file),'peak','region_len','-v7.3');
+        %%%Saving the peak file for the current window (./outpeak/chrid_peak.mat)
         clear region;
     end
-end
 end
 
