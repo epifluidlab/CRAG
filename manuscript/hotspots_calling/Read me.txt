@@ -20,15 +20,13 @@ samtools view -bh -F 3852 -f 3 -q 30 bamfileName.bam > out.bam
 Also, if you want to call hotspots for several chrommsomes (not the whole genome), you can provide the bam file with the corresponding chromosomes.
 
 (6)#### Options for hotspot calling
-```
--global p value cut-off: argument: 'global_p', a positive number between 0 to 1 ([0,1]). default: 0.00001. 
--local p value cut-off: argument: 'local_p', a positive number between 0 to 1 ([0,1]).default: 0.00001
+
 -fdr cut-off:argument: 'fdr', a positive number between 0 to 1 ([0,1]). default: 0.01
 -hotspot distance for merging: argument: 'distance', a positive integer ([1,inf)). default: 200
 -whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 1. 
 ```
-CRAG('result_dir',1,'local_p',0.001,'distance',300,'enrichment',0)
---Call hotspots in 'result_dir', using IFS without GC-bias correction, with global p value cut-off = 0.00001, local p value cut-off = 0.001 and fdr cut-off = 0.01. After the significant regions were detected, the regions nearby (with distance less than 300bp) were merged. And the pipeline will produce four files (two hotspot files: peak_all.mat, peaks.bed and two files of the fragmentation pattern around hotspots (IFS_plot.fig, IFS_plot.pdf)) in result_dir/result/n.
+CRAG('result_dir',1,'distance',300,'enrichment',0)
+--Call hotspots in 'result_dir', using IFS without GC-bias correction, with fdr cut-off = 0.20. After the significant regions were detected, the regions nearby (with distance less than 300bp) were merged. And the pipeline will produce four files (two hotspot files: peak_all.mat, peaks.bed and two files of the fragmentation pattern around hotspots (IFS_plot.fig, IFS_plot.pdf)) in result_dir/result/n.
 
 (7) The pipeline works in both Linux (mac os) and Windows. In windows, as the file path names for Windows and Linux is different, you should change the path name fromat in the code.
  
