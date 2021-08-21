@@ -2,18 +2,15 @@ function CRAG(data_name,peak_type,varargin)
 %%%%%%Call hotspots based on fragment information saved in txt file in folder 'data_name' (i.e. BH01).
 %%%%%%Call hotspots based on coverage and fragment length. (Peak_type==1: IFS. Peak_type==2: GC bias corrected IFS.)
 %%%optional parameters:
-%%global_p: global p-value cut off
-%%local_p: p-value cut-off for local test
-%%fdr: cut-off
-%%distance: Distance cut-off to merge the significant regions nearby.
+%%fdr: cut-off. default: 0.20
+%%distance: Distance cut-off to merge the significant regions nearby. default:200
 %%enrichment:whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 1.
 
-%%%%%%Add the path of the funtions (data) used in this pipeline as workplace
+%%%%%%Add the path of the funtions used in this pipeline as workplace
 current_path=pwd;
 lo=strfind(current_path,'/');
 parent_path=current_path(1,1:(lo(end)-1));
 addpath(genpath(parent_path));
-
 
 
 if ischar(peak_type)
@@ -22,9 +19,7 @@ end
 if nargin<2;error('There should be at least two input parameters');end
 if nargin==3;error('Input parameters error£¡');end
 
-global_p=0.00001;
-local_p=0.00001;
-fdr=0.01;
+fdr=0.2;
 distance=200;
 enrichment=1;
 para_val=varargin;
@@ -36,10 +31,6 @@ while length(para_val)>=2
     end
     para_val=para_val(3:end);
     switch prop
-        case 'global_p'
-            global_p=val;
-        case 'local_p'
-            local_p=val;
         case 'fdr'
             fdr=val;
         case 'distance'
@@ -54,14 +45,14 @@ end
 
 %%Use function 'txt_read' to read fragment informaion from txt file
 %%and map the fragment information. All the data was saved in 'data_n/' as 'chri.mat'
-for i=1:22
+parfor i=1:22
     txt_read(data_name,i);
 end
 
 
 %%The output was saved in 'outpeak_n/' as 'chri_peak.mat'.
-for i=1:22
-    Hotspot_call(data_name,peak_type,i,global_p,local_p,fdr);
+parfor i=1:22
+    Hotspot_call(data_name,peak_type,i,fdr);
 end
 
 %%%Merge all the hotspots and the output was saved in 'result_n/' as 'peak_all.mat'
