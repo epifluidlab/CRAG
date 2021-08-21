@@ -2,7 +2,6 @@ function IFS_binaryClass_classification(input_file_path,fold_number)
 %%%%%%%Do binary classification for IFS matrix using liner svm
 %input_file_path, the file name saving the IFS matrix for all the fold
 %fold_number: The number of the k-fold validation
-%feature_num: The number of features used.
 
 if ischar(fold_number)
     fold_number=str2double(fold_number);
