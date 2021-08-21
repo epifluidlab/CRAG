@@ -9,8 +9,6 @@ function Hotspot_call_multi_sample(file_list,input_path,out_name,peak_type,varar
 %%peak_type: 2-call hotspots using IFS after GC bias correction
 
 %%%optional parameters:
-%%global_p: global p-value cut off
-%%local_p: p-value cut-off for local test
 %%fdr: cut-off
 %%distance: Distance cut-off to merge the significant regions nearby.
 %%enrichment:whether or not do enrichment for the hotspots:  argument: 'enrichment', 0 or 1. default: 1.
@@ -32,9 +30,7 @@ end
 if nargin<4;error('There should be at least four input parameters');end
 if nargin==5;error('Input parameters error!');end
 
-global_p=0.00001;
-local_p=0.00001;
-fdr=0.01;
+fdr=0.20;
 distance=200;
 enrichment=1;
 para_val=varargin;
@@ -46,10 +42,6 @@ while length(para_val)>=2
     end
     para_val=para_val(3:end);
     switch prop
-        case 'global_p'
-            global_p=val;
-        case 'local_p'
-            local_p=val;
         case 'fdr'
             fdr=val;
         case 'distance'
@@ -61,13 +53,17 @@ while length(para_val)>=2
     end
 end
 
+if ~exist(out_name,'dir')
+    system(['mkdir ' out_name]);
+end
+
 %%%%%%%%merge all IFS in the file list and save them in out_name/data_n
-for i=1:22
+parfor i=1:22
     data_merge(input_path,out_name,file_list,i);
 end
 
 %%%%%%%Call hotspots
-for i=1:22
+parfor i=1:22
     Hotspot_call(out_name,peak_type,i,global_p,local_p,fdr);
 end
 %%%%%%merge hotspots
