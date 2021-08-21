@@ -126,7 +126,7 @@ if (peak_type == 1) %%%%Call peaks using IFS
     cou=length(final_region(:,1));
     p(1:cou,1)=max(final_region(:,4),final_region(:,5));
     
-    [~,fdr]=mafdr(p,'BHFDR',true);
+    fdr=mafdr(p,'BHFDR',true);
     %%Using Benjamini and Hochberg correction
     %%to obtain the FDR for global p-value
     final_region(:,6)=fdr(1:cou,1);
@@ -252,7 +252,7 @@ else
         p=ones(sum(flag_bin),1);
         cou=length(final_region(:,1));
         p(1:cou,1)=max(final_region(:,4),final_region(:,5));
-        [~,fdr]=mafdr(p,'BHFDR',true);
+        fdr=mafdr(p,'BHFDR',true);
         %%Using Benjamini and Hochberg correction
         %%to obtain the FDR for global p-value
         final_region(:,6)=fdr(1:cou,1);
