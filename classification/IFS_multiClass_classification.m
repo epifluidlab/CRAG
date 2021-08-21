@@ -4,7 +4,7 @@ function IFS_multiClass_classification(input_file_path,fold_number,class_num)
 %input_file_path, the file name saving the IFS matrix for all the fold
 %fold_number: The number of the k-fold validation
 %class_num: The types of samples in this classification
-%feature_num: The number of features used.
+
 if ischar(fold_number)
     fold_number=str2double(fold_number);
 end
